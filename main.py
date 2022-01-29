@@ -21,14 +21,26 @@ for rating_and_vote_string in ratings_and_votes:
     ratings.append(rating_and_vote[:3])
     votes.append(rating_and_vote[3:]) 
 
-top_movies_list = []
+top_movies_data = []
 
 for index in range(0, len(movies)):
     movie_string = movies[index].get_text()
     movie = ' '.join(movie_string.split()).replace('.', '')
     movie_title = movie[len(str(index))+1:-7]
-    top_movies_list.append(movie_title)
+    year = re.search('\((.*?)\)', movie_string).group(1)
+    rank = movie.split()[0]
+    movie_data = {
+        'movie_title' : movie_title,
+        'rank': rank,
+        'year': year,
+        'star_cast' : crew[index],
+        'rating' : ratings[index],
+        'votes' : votes[index],
+        'link' : links[index]} 
+    top_movies_data.append(movie_data)
 
-for top_movie in top_movies_list: 
-    print(top_movie)
+for movie_data in top_movies_data: 
+    print('{} : {} ({}), Starring : {}, Rating: {}'.format(movie_data['rank'], movie_data['movie_title'],
+    movie_data['year'], movie_data['star_cast'], movie_data['rating']))
+
 
